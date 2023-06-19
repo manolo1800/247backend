@@ -19,11 +19,11 @@ class UserController extends Controller
     public function index()
     {
         //
-        $auth = Auth::user()->name;        
+        $auth = Auth::user()->name;
         $users = User::all();
         $user_types = UserType::all();
-        
-        
+
+
         return Inertia::render('User/Index',['users'=>$users,'auth'=>$auth,'user_types'=>$user_types]);
     }
 
@@ -33,22 +33,23 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try{
-            return $request;
-
             //cargar imagen en la carpeta
-            $image = $request->file('logo_file_path');
-            $filename = time() . '.' . $image->getClientOriginalExtension();
-            $path = 'img/logo_empresas/' . $filename;
-            Image::make($image)->save(public_path($path));
-
+            if($request->hasFile('profile_photo_path')){
+                $image = $request->file('profile_photo_path');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $path = 'img/usuarios/' . $filename;
+                Image::make($image)->save(public_path($path));
+            }else{
+                return "no hay imagen";
+            }
             //guardar registro
-            $user = new User();
+            /*$user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->id_user_type = $request->id_user_type;
             $user->profile_photo_path = $path;
             $user->password = Hash::make($request->password);
-            $user->save();
+            $user->save();*/
         }catch(\Throwable $th){
             return $th;
         }

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react';
 
-export default Select(function TextInput({ options = null, className='',input,handleChange,isFocused = false, ...props }, ref) {
+export default forwardRef(function Select({ options = null, className = '', isFocused = false, id, name, selcthandle }, ref) {
     const input = ref ? ref : useRef();
 
     useEffect(() => {
@@ -11,15 +11,18 @@ export default Select(function TextInput({ options = null, className='',input,ha
 
     return (
         <select
-            {...props}            
-            onChange={(e) => handleChange(e)}
-            className={
-                'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ' +
-                className
-            }
+            id={id}
+            name={name}
             ref={input}
+            className={className}
+            onChange={(e) => selcthandle(e)}
+            required
         >
-        {options.}
+            {options.map((option) => (
+                <option value={option.value} key={option.value}>
+                    {option.label}
+                </option>
+            ))}
         </select>
     );
 });

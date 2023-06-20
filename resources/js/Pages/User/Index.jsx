@@ -30,7 +30,7 @@ export default function Dashboard(props) {
     });
 
     //definir los campos y metodos a enviar
-    const {data,setData,delete:destroy,post,puth,processing,reset,errors} = useForm({
+    const {data,setData,delete:destroy,post,put,processing,reset,errors} = useForm({
         id: '',
         name: '',
         email: '',
@@ -66,8 +66,73 @@ export default function Dashboard(props) {
     //guardar datos
     const save = (e) => {
         e.preventDefault();
+        //setModal(false);
 
-        post(route('user.store'));
+        if(operation === 1)
+        {
+            post(route('user.store'),{
+                onSuccess: () => {},
+                onError: () => {
+                    if(errors.name)
+                    {
+                        reset('name');
+                        nameInput.current.focus();
+                    }
+                    if(errors.name)
+                    {
+                        reset('name');
+                        nameInput.current.focus();
+                    }
+                    if(errors.email)
+                    {
+                        reset('email');
+                        emailInput.current.focus();
+                    }
+                    if(errors.password)
+                    {
+                        reset('password');
+                        passwordInput.current.focus();
+                    }
+                    if(errors.password_confirmation)
+                    {
+                        reset('password_confirmation');
+                        password_confirmationInput.current.focus();
+                    }
+                }
+            });
+        }else{
+            put(route('user.update',data.id),{
+                onSuccess: () => {},
+                onError: () => {
+                    if(errors.name)
+                    {
+                        reset('name');
+                        nameInput.current.focus();
+                    }
+                    if(errors.name)
+                    {
+                        reset('name');
+                        nameInput.current.focus();
+                    }
+                    if(errors.email)
+                    {
+                        reset('email');
+                        emailInput.current.focus();
+                    }
+                    if(errors.password)
+                    {
+                        reset('password');
+                        passwordInput.current.focus();
+                    }
+                    if(errors.password_confirmation)
+                    {
+                        reset('password_confirmation');
+                        password_confirmationInput.current.focus();
+                    }
+                }
+            });
+        }
+
     }
 
     const borrar = (id) => {
@@ -126,6 +191,7 @@ export default function Dashboard(props) {
                             id="id_user_type"
                             name="id_user_type"
                             ref={id_user_typeInput}
+                            value={data.id_user_type}
                             className="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                             selcthandle={(e) => setData('id_user_type', e.target.value)}
                             required

@@ -27,7 +27,7 @@ export default forwardRef(function InputFile({className = '', isFocused = false,
                             ref={input}
                             className={className}
                             onChange={(e) => filehandle(e)}
-                            required
+                            //required
                             type="file"
                             //value={value}
                         />

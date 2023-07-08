@@ -20,6 +20,7 @@ export default function Dashboard(props) {
     const [operation,setOperation] = useState(1);
     const nameInput = useRef();
     const emailInput = useRef();
+    const [showPassword, setShowPassword] = useState(true);
     const passwordInput = useRef();
     const password_confirmationInput = useRef();
     const profile_photo_pathInput = useRef();
@@ -52,6 +53,7 @@ export default function Dashboard(props) {
             setTitle('Crear usuario');
             setButtonMenssage('Crear');
         }else{
+            setShowPassword(false);
             setTitle('Actualizar usuario');
             setButtonMenssage('Actualizar');
             setData({id:id,name:name,email:email,password:password,password_confirmation:password_confirmation,profile_photo_path:profile_photo_path,id_user_type:id_user_type});
@@ -63,6 +65,12 @@ export default function Dashboard(props) {
         setModal(false);
     }
 
+    const ok = (mensaje) => {
+        reset();
+        closeModal();
+        Swal.fire({title:mensaje,icon:'success'});
+    }
+
     //guardar datos
     const save = (e) => {
         e.preventDefault();
@@ -71,7 +79,7 @@ export default function Dashboard(props) {
         if(operation === 1)
         {
             post(route('user.store'),{
-                onSuccess: () => {},
+                onSuccess: () => {ok('se creo con exito')},
                 onError: () => {
                     if(errors.name)
                     {
@@ -102,7 +110,7 @@ export default function Dashboard(props) {
             });
         }else{
             put(route('user.update',data.id),{
-                onSuccess: () => {},
+                onSuccess: () => {ok('se modifico con exito')},
                 onError: () => {
                     if(errors.name)
                     {
@@ -135,9 +143,25 @@ export default function Dashboard(props) {
 
     }
 
-    const borrar = (id) => {
-        alert(id);
+    const borrar = (id,name) => {
+        const alerta = Swal.mixin({buttonsStyling:true});
+        alerta.fire({
+            title:'seguro desea eliminar a <br>'+name,
+            text:'se perdera el usuario',
+            icon:'question',showCancelButton:true,
+            confirmButtonText: '<i class="fa-solid fa-check"></i> Si, eliminar ',
+            cancelButtonText: '<i class="fa-solid fa-check"></i> Cancelar ',
+        }).then((result) => {
+            if(result.isConfirmed)
+            {
+                destroy(route('user.destroy',id),{
+                    onSuccess: () => {ok('se elimino con exito')},
+                });
+            }
+        })
+
     }
+
     return (
         <AuthenticatedLayout
             user={props.auth}
@@ -167,7 +191,7 @@ export default function Dashboard(props) {
                                     </div>
 
                                     <div className="hidden sm:flex sm:flex-col sm:items-end mt-3">
-                                        <svg onClick={()=>borrar(user.id)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <svg onClick={()=>borrar(user.id,user.name)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                                         </svg>
                                     </div>
@@ -233,7 +257,7 @@ export default function Dashboard(props) {
                     </div>
 
                     <div className="mt-4">
-                        <InputLabel htmlFor="password" value="Contraseña" />
+                        <InputLabel htmlFor="password" value="Contraseña" style={{display: showPassword ? 'block' : 'none'}} />
 
                         <TextInput
                             id="password"
@@ -243,14 +267,15 @@ export default function Dashboard(props) {
                             value={data.password}
                             className="mt-1 block w-full"
                             onChange={(e) => setData('password', e.target.value)}
-                            required
+                            //required
+                            style={{display: showPassword ? 'block' : 'none'}}
                         />
 
                         <InputError message={errors.password} className="mt-2" />
                     </div>
 
                     <div className="mt-4">
-                        <InputLabel htmlFor="password_confirmation" value="Confirmar contraseña" />
+                        <InputLabel htmlFor="password_confirmation" value="Confirmar contraseña" style={{display: showPassword ? 'block' : 'none'}} />
 
                         <TextInput
                             id="password_confirmation"
@@ -260,7 +285,8 @@ export default function Dashboard(props) {
                             value={data.password_confirmation}
                             className="mt-1 block w-full"
                             onChange={(e) => setData('password_confirmation', e.target.value)}
-                            required
+                            //required
+                            style={{display: showPassword ? 'block' : 'none'}}
                         />
 
                         <InputError message={errors.password_confirmation} className="mt-2" />

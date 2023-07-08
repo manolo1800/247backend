@@ -60,7 +60,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
-            return $this->index();
+            return redirect('user');
 
         }catch(\Throwable $th){
             return $th;
@@ -81,14 +81,24 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
         //
-        return $user;
-        die();
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->id_user_type = $request->id_user_type;
-        $user->profile_photo_path = $request->img;
+
+        if($request->hasFile('profile_photo_path')){
+
+            $image = $request->file('profile_photo_path');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $path = 'imgs/usuarios/' . $filename;
+            Image::make($image)->save(public_path($path));
+
+            $user->profile_photo_path = $path;
+
+        }
+
         $user->save();
+        return redirect('user');
 
     }
 
@@ -99,5 +109,6 @@ class UserController extends Controller
     {
         //
         $user->delete();
+        return redirect('user');
     }
 }

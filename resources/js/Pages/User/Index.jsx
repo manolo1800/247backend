@@ -50,6 +50,7 @@ export default function Dashboard(props) {
 
         //si la variable op es = 1 muestra el form de crear sino muestra el de actualizar
         if(op == 1){
+            setShowPassword(true);
             setTitle('Crear usuario');
             setButtonMenssage('Crear');
         }else{

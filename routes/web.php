@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('user',UserController::class);
     Route::resource('empresa',EmpresaController::class);
     Route::get('ConfiguracionInicial',function(){return Inertia::render('ConfiguracionInicial/Index');});
+
 });
 
 require __DIR__.'/auth.php';

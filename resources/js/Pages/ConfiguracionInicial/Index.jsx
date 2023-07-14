@@ -62,9 +62,9 @@ export default function Dashboard(props) {
                         <ul role="list" className="divide-y divide-gray-800 mx-12 px-12">
                             {opciones.map((opcion,i) => (
                                 <li  className="flex justify-between gap-x-6 py-5">
-                                    <div className="flex gap-x-4">                                    
+                                    <div className="flex gap-x-4">
                                         <opcion.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
-                                        <p>{opcion.name}</p>
+                                        <a href={route(opcion.href)}>{opcion.name}</a>
                                     </div>
                                 </li>
                             ))}

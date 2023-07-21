@@ -20,12 +20,13 @@ class UserController extends Controller
     public function index()
     {
         //
-        $auth = Auth::user()->name;
+
         $users = User::all();
         $user_types = UserType::all();
 
 
-        return Inertia::render('User/Index',['users'=>$users,'auth'=>$auth,'user_types'=>$user_types]);
+        $return = ['users'=>$users,'user_types'=>$user_types];
+        return response()->json($return, 200);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\empresas;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class EmpresaController extends Controller
 {
@@ -15,8 +16,7 @@ class EmpresaController extends Controller
     {
         //
         $empresas = empresas::all();
-        //return "hola";
-        return Inertia::render('ConfiguracionInicial/Empresa/Index',['empresas'=>$empresas]);
+        return response()->json($empresas);        
     }
 
     /**

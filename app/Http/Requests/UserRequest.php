@@ -27,8 +27,8 @@ class UserRequest extends FormRequest
             //
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'profile_photo_path' => 'required|image|max:2048',
+            'password' => 'required',            
+            //'profile_photo_path' => 'required|image|max:2048',
         ];
     }
 }

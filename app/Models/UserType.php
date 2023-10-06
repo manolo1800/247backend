@@ -32,4 +32,6 @@ class UserType extends Model
     protected $fillable = [
         'user_type',
     ];
+
+    protected $hidden = ['created_at','updated_at'];
 }

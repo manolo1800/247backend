@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\ArchivosController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('user', UserController::class);
 Route::resource('empresa', EmpresaController::class);
+Route::post('upload/{folder}', [ArchivosController::class, 'upload']);
+Route::get('download/{folder}/{file}', [ArchivosController::class, 'download']);

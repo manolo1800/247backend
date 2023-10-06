@@ -28,7 +28,7 @@ class UserUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             //'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'profile_photo_path' => 'image|max:2048',
+            //'profile_photo_path' => 'image|max:2048',
         ];
     }
 }

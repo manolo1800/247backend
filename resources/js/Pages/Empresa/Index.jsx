@@ -18,17 +18,13 @@ export default function Dashboard(props) {
     const [title, setTitle ] = useState('');
     const [buttonMenssage,setButtonMenssage] = useState('');
     const [operation,setOperation] = useState(1);
-    const nameInput = useRef();
-    const emailInput = useRef();
-    const [showPassword, setShowPassword] = useState(true);
-    const passwordInput = useRef();
-    const password_confirmationInput = useRef();
-    const profile_photo_pathInput = useRef();
-    const id_user_typeInput = useRef();
-
-    const options = props.user_types.map( i => {
-        return {value: i.id, label: i.user_type};
-    });
+    const nombre_empresaInput = useRef();
+    const color_dashboardInput = useRef();    
+    const color_letra_titleInput = useRef();
+    const color_letra_dashboardInput = useRef();
+    const color_letra_bodyInput = useRef();
+    const color_boton_crearInput = useRef();
+    const logo_file_pathInput = useRef();
 
     //definir los campos y metodos a enviar
     const {data,setData,delete:destroy,post,put,processing,reset,errors} = useForm({
@@ -38,26 +34,26 @@ export default function Dashboard(props) {
         password: '',
         password_confirmation: '',
         profile_photo_path: '',
-        id_user_type: '',
+        id_empresa_type: '',
     });
 
     //abrir modal y determinar si se crea o se actualiza
-    const openModal = (op,id,name,email,password,password_confirmation,profile_photo_path,id_user_type) => {
+    const openModal = (op,id,nombre_empresa,color_dashboard,color_letra_title,color_letra_dashboard,color_boton_crear,logo_file_path) => {
 
         setModal(true);
         setOperation(op);
-        setData({name:'',email:'',password:'',password_confirmation:'',id_user_type:'',profile_photo_path:''});
+        setData({nombre_empresa:'',color_dashboard:'',color_letra_title:'',color_letra_dashboard:'',color_boton_crear:'',logo_file_path:''});
 
         //si la variable op es = 1 muestra el form de crear sino muestra el de actualizar
         if(op == 1){
             setShowPassword(true);
-            setTitle('Crear usuario');
+            setTitle('Crear empresa');
             setButtonMenssage('Crear');
         }else{
             setShowPassword(false);
-            setTitle('Actualizar usuario');
+            setTitle('Actualizar empresa');
             setButtonMenssage('Actualizar');
-            setData({id:id,name:name,email:email,password:password,password_confirmation:password_confirmation,profile_photo_path:profile_photo_path,id_user_type:id_user_type});
+            setData({id:id,nombre_empresa:nombre_empresa,color_dashboard:color_dashboard,color_letra_title:color_letra_title,color_letra_dashboard:color_letra_dashboard,color_boton_crear:color_boton_crear,logo_file_path:logo_file_path});
         }
     }
 
@@ -66,13 +62,11 @@ export default function Dashboard(props) {
         setModal(false);
     }
 
-    const menssage = (mensaje,icon) => {
+    const ok = (mensaje) => {
         reset();
         closeModal();
-        Swal.fire({title:mensaje,icon:icon});
+        Swal.fire({title:mensaje,icon:'success'});
     }
-
-
 
     //guardar datos
     const save = (e) => {
@@ -81,64 +75,84 @@ export default function Dashboard(props) {
 
         if(operation === 1)
         {
-            post(route('user.store'),{
+            post(route('empresa.store'),{
                 onSuccess: () => {ok('se creo con exito')},
                 onError: () => {
-                    if(errors.name)
+                    if(errors.nombre_empresa)
                     {
-                        reset('name');
-                        nameInput.current.focus();
+                        reset('nombre_empresa');
+                        nombre_empresaInput.current.focus();
                     }
-                    if(errors.name)
+                    if(errors.color_dashboard)
                     {
-                        reset('name');
-                        nameInput.current.focus();
+                        reset('color_dashboard');
+                        color_dashboardInput.current.focus();
                     }
-                    if(errors.email)
+                    if(errors.color_letra_title)
                     {
-                        reset('email');
-                        emailInput.current.focus();
+                        reset('color_letra_title');
+                        color_letra_titleInput.current.focus();
                     }
-                    if(errors.password)
+                    if(errors.color_letra_dashboard)
                     {
-                        reset('password');
-                        passwordInput.current.focus();
+                        reset('color_letra_dashboard');
+                        color_letra_dashboardInput.current.focus();
                     }
-                    if(errors.password_confirmation)
+                    if(errors.color_letra_body)
                     {
-                        reset('password_confirmation');
-                        password_confirmationInput.current.focus();
+                        reset('color_letra_body');
+                        color_letra_bodyInput.current.focus();
+                    }
+                    if(errors.color_boton_crear)
+                    {
+                        reset('color_boton_crear');
+                        color_boton_crearInput.current.focus();
+                    }
+                    if(errors.logo_file_path)
+                    {
+                        reset('logo_file_path');
+                        logo_file_pathInput.current.focus();
                     }
                 }
             });
         }else{
-            put(route('user.update',data.id),{
+            put(route('empresa.update',data.id),{
                 onSuccess: () => {ok('se modifico con exito')},
                 onError: () => {
-                    if(errors.name)
+                    if(errors.nombre_empresa)
                     {
-                        reset('name');
-                        nameInput.current.focus();
+                        reset('nombre_empresa');
+                        nombre_empresaInput.current.focus();
                     }
-                    if(errors.name)
+                    if(errors.color_dashboard)
                     {
-                        reset('name');
-                        nameInput.current.focus();
+                        reset('color_dashboard');
+                        color_dashboardInput.current.focus();
                     }
-                    if(errors.email)
+                    if(errors.color_letra_title)
                     {
-                        reset('email');
-                        emailInput.current.focus();
+                        reset('color_letra_title');
+                        color_letra_titleInput.current.focus();
                     }
-                    if(errors.password)
+                    if(errors.color_letra_dashboard)
                     {
-                        reset('password');
-                        passwordInput.current.focus();
+                        reset('color_letra_dashboard');
+                        color_letra_dashboardInput.current.focus();
                     }
-                    if(errors.password_confirmation)
+                    if(errors.color_letra_body)
                     {
-                        reset('password_confirmation');
-                        password_confirmationInput.current.focus();
+                        reset('color_letra_body');
+                        color_letra_bodyInput.current.focus();
+                    }
+                    if(errors.color_boton_crear)
+                    {
+                        reset('color_boton_crear');
+                        color_boton_crearInput.current.focus();
+                    }
+                    if(errors.logo_file_path)
+                    {
+                        reset('logo_file_path');
+                        logo_file_pathInput.current.focus();
                     }
                 }
             });
@@ -157,18 +171,17 @@ export default function Dashboard(props) {
         }).then((result) => {
             if(result.isConfirmed)
             {
-                destroy(route('user.destroy',id),{
+                destroy(route('empresa.destroy',id),{
                     onSuccess: () => {ok('se elimino con exito')},
                 });
             }
         })
-
     }
 
     return (
         <AuthenticatedLayout
-            user={props.auth}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">USUARIOS</h2>}
+            empresa={props.auth}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">EMPRESAS</h2>}
         >
             <Head title="Usuarios" />
             <div className="grid v-screen place-items-center">
@@ -183,18 +196,18 @@ export default function Dashboard(props) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-purple-500 bg-opacity-50 overflow-hidden shadow-sm sm:rounded-lg">
                         <ul role="list" className="divide-y divide-gray-800 mx-12 px-12">
-                            {props.users.map((user,i) => (
-                                <li key={user.email} className="flex justify-between gap-x-6 py-5">
+                            {props.empresas.map((empresa,i) => (
+                                <li key={empresa.email} className="flex justify-between gap-x-6 py-5">
                                     <div className="flex gap-x-4">
-                                        <img onClick={()=>openModal(2,user.id,user.name,user.email,user.profile_photo_path)} className="h-12 w-12 flex-none rounded-full bg-gray-50" src={user.profile_photo_path} alt="" />
+                                        <img onClick={()=>openModal(2,empresa.id,empresa.nombre_empresa,empresa.color_dashboard,empresa.color_letra_title,color_letra_dashboard,color_boton_crear,logo_file_path)} className="h-12 w-12 flex-none rounded-full bg-gray-50" src={empresa.profile_photo_path} alt="" />
                                         <div className="min-w-0 flex-auto">
-                                            <p onClick={()=>openModal(2,user.id,user.name,user.email,user.profile_photo_path)} className="text-sm font-semibold leading-6 text-gray-900">{user.name}</p>
-                                            <p onClick={()=>openModal(2,user.id,user.name,user.email,user.profile_photo_path)} className="mt-1 truncate text-xs leading-5 text-gray-500">{user.email}</p>
+                                            <p onClick={()=>openModal(2,empresa.id,empresa.nombre_empresa,empresa.color_dashboard,empresa.color_letra_title,color_letra_dashboard,color_boton_crear,logo_file_path)} className="text-sm font-semibold leading-6 text-gray-900">{empresa.name}</p>
+                                            <p onClick={()=>openModal(2,empresa.id,empresa.nombre_empresa,empresa.color_dashboard,empresa.color_letra_title,color_letra_dashboard,color_boton_crear,logo_file_path)} className="mt-1 truncate text-xs leading-5 text-gray-500">{empresa.email}</p>
                                         </div>
                                     </div>
 
                                     <div className="hidden sm:flex sm:flex-col sm:items-end mt-3">
-                                        <svg onClick={()=>borrar(user.id,user.name)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <svg onClick={()=>borrar(empresa.id,empresa.nombre_empresa)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                                         </svg>
                                     </div>
@@ -209,34 +222,19 @@ export default function Dashboard(props) {
                 <form onSubmit={save} className="p-6">
                     <h2 className="text-lg font-medium text-gray-900">
                         {title}
-                    </h2>
-
-                    <div className='py-5'>
-                    <InputLabel htmlFor="id_user_type" value="Permisos de usuario" />
-                        <Select
-                            options={options}
-                            id="id_user_type"
-                            name="id_user_type"
-                            ref={id_user_typeInput}
-                            value={data.id_user_type}
-                            className="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                            selcthandle={(e) => setData('id_user_type', e.target.value)}
-                            required
-                        />
-                        <InputError message={errors.id_user_type} className="mt-2" />
-                    </div>
+                    </h2>                    
 
                     <div>
                         <InputLabel htmlFor="name" value="Nombre" />
 
                         <TextInput
-                            id="name"
-                            name="name"
-                            ref={nameInput}
-                            value={data.name}
+                            id="nombre_empresa"
+                            name="nombre_empresa"
+                            ref={nombre_empresaInput}
+                            value={data.nombre_empresa}
                             className="mt-1 block w-full"
                             isFocused={true}
-                            onChange={(e) => setData('name', e.target.value)}
+                            onChange={(e) => setData('nombre_empresa', e.target.value)}
                             required
                         />
                         <InputError message={errors.name} className="mt-2" />

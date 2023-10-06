@@ -9,7 +9,6 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use App\Models\UserType;
 
 class UserController extends Controller
@@ -21,7 +20,8 @@ class UserController extends Controller
     {
         //
 
-        $users = User::all();
+        //$users = User::all();        
+        $users = User::Select('id','profile_photo_path','user','name','email','id_user_type')->get();
         $user_types = UserType::all();
 
 
@@ -35,7 +35,8 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try{
-
+            
+            
             //guardar registro
             $user = new User();
             $user->name = $request->name;
@@ -46,11 +47,11 @@ class UserController extends Controller
             if($request->hasFile('profile_photo_path')){
 
                 $image = $request->file('profile_photo_path');
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                $path = 'imgs/usuarios/' . $filename;
-                Image::make($image)->save(public_path($path));
-
-                $user->profile_photo_path = $path;
+                $filename = time() . '.' . $image->getClientOriginalExtension();                
+                $path = 'http://127.0.0.1:8000/api/download/usuarios/image_' . $filename;
+                $fileName = $image->storeAs('usuarios/', 'image_' . $filename);
+                //$responseImage = Image::make($image)->save(public_path($path));                
+                $user->profile_photo_path = $path;                
 
             }else{
 
@@ -61,10 +62,10 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
-            return redirect('user');
+            return response()->json("success", 200);
 
-        }catch(\Throwable $th){
-            return $th;
+        }catch(\Throwable $th){            
+            return response()->json("error", 400);
         }
     }
 
@@ -74,32 +75,43 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
+        
+        return $user;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
         //
+        return $request;
+        die();
+        try{
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->id_user_type = $request->id_user_type;
+            
+            /*if($request->hasFile('profile_photo_path')){
+            
+                $image = $request->file('profile_photo_path');
+                $filename = time() . '.' . $image->getClientOriginalExtension();                
+                $path = 'http://127.0.0.1:8000/api/download/usuarios/image_' . $filename;
+                $fileName = $image->storeAs('usuarios/', 'image_' . $filename);
+                $user->profile_photo_path = $path;
+            
+            }*/
+        
+            $user->update();    
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->id_user_type = $request->id_user_type;
+            return response()->json("success", 200);
 
-        if($request->hasFile('profile_photo_path')){
-
-            $image = $request->file('profile_photo_path');
-            $filename = time() . '.' . $image->getClientOriginalExtension();
-            $path = 'imgs/usuarios/' . $filename;
-            Image::make($image)->save(public_path($path));
-
-            $user->profile_photo_path = $path;
-
+        }catch(\Throwable $th){  
+            return $th;          
+            //return response()->json("error", 400);
         }
-
-        $user->save();
-        return redirect('user');
+        
+        
 
     }
 
@@ -109,7 +121,13 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
-        $user->delete();
-        return redirect('user');
+        try{
+            $user->delete();
+            return response()->json("success", 200);
+        }catch(\Throwable $th){
+            return response()->json("error", 400);
+        }
+        
+        
     }
 }
